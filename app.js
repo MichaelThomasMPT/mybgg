@@ -171,6 +171,15 @@ function get_widgets() {
         sortBy: function(a, b){ return PLAYING_TIME_ORDER.indexOf(a.name) - PLAYING_TIME_ORDER.indexOf(b.name); },
       }
     ),
+    "refine_previousplayers": panel('Previous players')(instantsearch.widgets.refinementList)(
+      {
+        container: '#facet-previous-players',
+        attribute: 'previous_players',
+        operator: 'and',
+        searchable: true,
+        showMore: true,
+      }
+    ),
     "hits": instantsearch.widgets.hits({
       container: '#hits',
       transformItems: function(items) {
@@ -196,6 +205,7 @@ function get_widgets() {
 
           game.categories = game.categories.join(", ");
           game.mechanics = game.mechanics.join(", ");
+          game.previous_players = game.previous_players.join(", ");
           game.tags = game.tags.join(", ");
           game.description = game.description.trim();
 
@@ -234,8 +244,7 @@ function init(SETTINGS) {
   search.on('render', on_render);
 
   var widgets = get_widgets();
-
-  search.addWidgets([
+  var widgetsToDisplay = [
     widgets["search"],
     widgets["clear"],
     widgets["refine_categories"],
@@ -246,7 +255,11 @@ function init(SETTINGS) {
     widgets["hits"],
     widgets["stats"],
     widgets["pagination"],
-  ]);
+  ]
+  if (SETTINGS.project.show_previous_players == true) {
+    widgetsToDisplay.push(widgets["refine_previousplayers"])
+  }
+  search.addWidgets(widgetsToDisplay);
 
   search.start();
 
