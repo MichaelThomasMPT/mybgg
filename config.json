@@ -2,7 +2,7 @@
     "project": {
         "name": "mybgg",
         "title": "",
-        "show_previous_players": false
+        "show_previous_players": true
     },
     "boardgamegeek": {
         "user_name": "Micker",
