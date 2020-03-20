@@ -36,6 +36,7 @@ class Downloader():
         game_list_data = self.client.game_list([game_in_collection["id"] for game_in_collection in collection_data])
         game_id_to_tags = {game["id"]: game["tags"] for game in collection_data}
         game_id_to_image = {game["id"]: game["image_version"] or game["image"] for game in collection_data}
+        game_id_to_lastmodified = {game["id"]: game["lastmodified"] for game in collection_data}
 
         games_data = list(filter(lambda x: x["type"] == "boardgame", game_list_data))
         expansions_data = list(filter(lambda x: x["type"] == "boardgameexpansion", game_list_data))
@@ -49,6 +50,7 @@ class Downloader():
         games = [
             BoardGame(
                 game_data,
+                lastmodified=game_id_to_lastmodified[game_data["id"]],
                 image=game_id_to_image[game_data["id"]],
                 tags=game_id_to_tags[game_data["id"]],
                 expansions=[

@@ -47,6 +47,7 @@ class Indexer:
                 'bgg_rank_ascending',
                 'bgg_numrated_descending',
                 'bgg_numowned_descending',
+                'bgg_lastmodified_descending',
             ]
         })
                
@@ -58,6 +59,9 @@ class Indexer:
         
         replica_index = client.init_index('bgg_numowned_descending')
         replica_index.set_settings({'ranking': ['desc(numowned)']})
+        
+        replica_index = client.init_index('bgg_lastmodified_descending')
+        replica_index.set_settings({'ranking': ['desc(lastmodified)']})
 
     @staticmethod
     def todict(obj):
