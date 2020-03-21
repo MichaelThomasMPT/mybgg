@@ -1,0 +1,19 @@
+{
+    "project": {
+        "name": "mybgg",
+        "title": "",
+        "show_previous_players": true
+    },
+    "boardgamegeek": {
+        "user_name": "sunburn18",
+        "extra_params": {
+            "own": 1
+        }
+    },
+    "algolia": {
+        "app_id": "SGMQYB4SYZ",
+        "api_key_search_only": "c620d1ba898099fadf47c130834b34ab",
+        "index_name": "BGG",
+        "hits_per_page": 48
+    }
+}
