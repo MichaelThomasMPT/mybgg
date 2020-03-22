@@ -90,7 +90,7 @@ function on_render() {
   });
 }
 
-function get_widgets() {
+function get_widgets(SETTINGS) {
   const WEIGHT_LABELS = [
     "Light",
     "Light Medium",
@@ -125,12 +125,11 @@ function get_widgets() {
     "sort": instantsearch.widgets.sortBy({
       container: '#sort-by',
       items: [
-        { label: 'Name', value:'BGG'},
-        { label: 'Rank/Rating', value:'bgg_rank_ascending'},
-        { label: 'Number of Ratings', value:'bgg_numrated_descending'},
-        { label: 'Number of Owners', value:'bgg_numowned_descending'},
-        { label: 'Last Modified', value:'bgg_lastmodified_descending'},
-      ],
+        {label: 'Name', value: SETTINGS.algolia.index_name},
+        {label: 'BGG Rank', value: 'bgg_rank_ascending'},
+        {label: 'Number of ratings', value: 'bgg_numrated_descending'},
+        {label: 'Number of owners', value: 'bgg_numowned_descending'},
+        {label: 'Last Modified', value: bgg_lastmodified_descending'}
     }),
     "clear": instantsearch.widgets.clearRefinements({
       container: '#clear-all',
@@ -242,8 +241,30 @@ function get_widgets() {
 
 
 function init(SETTINGS) {
+
+  var configIndexName = ''
+  switch (SETTINGS.algolia.sort_by) {
+    case undefined:
+    case 'asc(name)':
+      configIndexName = SETTINGS.algolia.index_name
+      break
+    case 'asc(rank)':
+    case 'desc(rating)':
+      configIndexName = 'bgg_rank_ascending'
+      break
+    case 'desc(numrated)':
+      configIndexName = 'bgg_numrated_descending'
+      break
+    case 'desc(numowned)':
+      configIndexName = 'bgg_numowned_descending'
+      break
+    default:
+      console.error("The provided config value for algolia.sort_by was invalid: " + SETTINGS.algolia.sort_by)
+      break;
+  }
+  
   const search = instantsearch({
-    indexName: SETTINGS.algolia.index_name,
+    indexName: configIndexName,
     searchClient: algoliasearch(
       SETTINGS.algolia.app_id,
       SETTINGS.algolia.api_key_search_only
@@ -253,7 +274,7 @@ function init(SETTINGS) {
 
   search.on('render', on_render);
 
-  var widgets = get_widgets();
+  var widgets = get_widgets(SETTINGS);
   var widgetsToDisplay = [
     widgets["search"],
     widgets["sort"],
