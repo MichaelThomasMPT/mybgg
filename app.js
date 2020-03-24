@@ -129,7 +129,8 @@ function get_widgets(SETTINGS) {
         {label: 'BGG Rank', value: 'bgg_rank_ascending'},
         {label: 'Number of ratings', value: 'bgg_numrated_descending'},
         {label: 'Number of owners', value: 'bgg_numowned_descending'},
-        {label: 'Last Modified', value: bgg_lastmodified_descending'}
+        {label: 'Last Modified', value: 'bgg_lastmodified_descending'}
+      ]
     }),
     "clear": instantsearch.widgets.clearRefinements({
       container: '#clear-all',
