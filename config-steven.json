@@ -2,7 +2,8 @@
     "project": {
         "name": "mybgg",
         "title": "",
-        "show_previous_players": true
+        "show_previous_players": true,
+        "show_total_plays": true
     },
     "boardgamegeek": {
         "user_name": "sunburn18",

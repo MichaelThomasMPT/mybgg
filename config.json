@@ -2,7 +2,8 @@
     "project": {
         "name": "mybgg",
         "title": "",
-        "show_previous_players": true
+        "show_previous_players": true,
+        "show_total_plays": true
     },
     "boardgamegeek": {
         "user_name": "Micker",
@@ -14,6 +15,7 @@
         "app_id": "Q0BYOGTQT3",
         "api_key_search_only": "784f35123be753bf113ed0bb67d6f212",
         "index_name": "BGG",
-        "hits_per_page": 48
+        "hits_per_page": 48,
+        "sort_by": "asc(name)"
     }
 }
