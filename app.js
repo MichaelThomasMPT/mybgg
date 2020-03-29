@@ -126,10 +126,10 @@ function get_widgets(SETTINGS) {
       container: '#sort-by',
       items: [
         {label: 'Name', value: SETTINGS.algolia.index_name},
-        {label: 'BGG Rank', value: 'bgg_rank_ascending'},
-        {label: 'Number of ratings', value: 'bgg_numrated_descending'},
-        {label: 'Number of owners', value: 'bgg_numowned_descending'},
-        {label: 'Last Modified', value: 'bgg_lastmodified_descending'}
+        {label: 'BGG Rank', value: SETTINGS.algolia.index_name + '_rank_ascending'},
+        {label: 'Number of ratings', value: SETTINGS.algolia.index_name + '_numrated_descending'},
+        {label: 'Number of owners', value: SETTINGS.algolia.index_name + '_numowned_descending'}
+        {label: 'Last Modified', value: SETTINGS.algolia.index_name + '_lastmodified_descending'}
       ]
     }),
     "clear": instantsearch.widgets.clearRefinements({
@@ -195,7 +195,7 @@ function get_widgets(SETTINGS) {
         container: '#facet-numplays',
         attribute: 'numplays',
         items: [
-          { label: 'Any' }, 
+          { label: 'Any' },
           { label: '0', end: 0 },
           { label: '1', start: 1, end: 1 },
           { label: '2-9', start: 2, end: 9 },
@@ -208,6 +208,9 @@ function get_widgets(SETTINGS) {
     "hits": instantsearch.widgets.hits({
       container: '#hits',
       transformItems: function(items) {
+        hide_facet_when_no_data('#facet-previous-players', items, 'previous_players');
+        hide_facet_when_no_data('#facet-numplays', items, 'numplays');
+
         return items.map(function(game){
           players = [];
           game.players.forEach(function(num_players){
@@ -232,10 +235,7 @@ function get_widgets(SETTINGS) {
           game.tags = game.tags.join(", ");
           game.description = game.description.trim();
           game.has_expansions = (game.expansions.length > 0);
-
-          if (SETTINGS.project.show_previous_players) {
-            game.previous_players = game.previous_players.join(", ");
-          }
+          game.previous_players = game.previous_players.join(", ");
 
           return game;
         });
@@ -257,6 +257,22 @@ function get_widgets(SETTINGS) {
   }
 }
 
+function hide_facet_when_no_data(facet_id, games, attr) {
+  var has_data_in_attr = false;
+  for (game of games) {
+    if (game[attr] != [] && game[attr] != "" && game[attr] != 0 && game[attr] != undefined) {
+      has_data_in_attr = true;
+      break;
+    }
+  }
+  var widget = document.querySelector(facet_id);
+  if (!has_data_in_attr) {
+    widget.style.display = 'none';
+  }
+  else {
+    widget.style.display = 'block';
+  }
+}
 
 function init(SETTINGS) {
 
@@ -268,13 +284,13 @@ function init(SETTINGS) {
       break
     case 'asc(rank)':
     case 'desc(rating)':
-      configIndexName = 'bgg_rank_ascending'
+      configIndexName = SETTINGS.algolia.index_name + '_rank_ascending'
       break
     case 'desc(numrated)':
-      configIndexName = 'bgg_numrated_descending'
+      configIndexName = SETTINGS.algolia.index_name + '_numrated_descending'
       break
     case 'desc(numowned)':
-      configIndexName = 'bgg_numowned_descending'
+      configIndexName = SETTINGS.algolia.index_name + '_numowned_descending'
       break
     default:
       console.error("The provided config value for algolia.sort_by was invalid: " + SETTINGS.algolia.sort_by)
@@ -293,7 +309,7 @@ function init(SETTINGS) {
   search.on('render', on_render);
 
   var widgets = get_widgets(SETTINGS);
-  var widgetsToDisplay = [
+  search.addWidgets([
     widgets["search"],
     widgets["sort"],
     widgets["clear"],
@@ -305,14 +321,9 @@ function init(SETTINGS) {
     widgets["hits"],
     widgets["stats"],
     widgets["pagination"],
-  ]
-  if (SETTINGS.project.show_previous_players == true) {
-    widgetsToDisplay.push(widgets["refine_previousplayers"])
-  }
-  if (SETTINGS.project.show_total_plays == true) {
-    widgetsToDisplay.push(widgets["refine_numplays"])
-  }
-  search.addWidgets(widgetsToDisplay);
+    widgets["refine_previousplayers"],
+    widgets["refine_numplays"]
+  ]);
 
   search.start();
 

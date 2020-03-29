@@ -46,23 +46,23 @@ class Indexer:
 
         mainIndex.set_settings({
             'replicas': [
-                'bgg_rank_ascending',
-                'bgg_numrated_descending',
-                'bgg_numowned_descending',
-                'bgg_lastmodified_descending',
+                mainIndex.name + '_rank_ascending',
+                mainIndex.name + '_numrated_descending',
+                mainIndex.name + '_numowned_descending',
+                mainIndex.name + '_lastmodified_descending',
             ]
         })
 
-        replica_index = client.init_index('bgg_rank_ascending')
+        replica_index = client.init_index(mainIndex.name + '_rank_ascending')
         replica_index.set_settings({'ranking': ['asc(rank)']})
 
-        replica_index = client.init_index('bgg_numrated_descending')
+        replica_index = client.init_index(mainIndex.name + '_numrated_descending')
         replica_index.set_settings({'ranking': ['desc(usersrated)']})
 
-        replica_index = client.init_index('bgg_numowned_descending')
+        replica_index = client.init_index(mainIndex.name + '_numowned_descending')
         replica_index.set_settings({'ranking': ['desc(numowned)']})
         
-        replica_index = client.init_index('bgg_lastmodified_descending')
+        replica_index = client.init_index(mainIndex.name + '_lastmodified_descending')
         replica_index.set_settings({'ranking': ['desc(lastmodified)']})
 
     @staticmethod
