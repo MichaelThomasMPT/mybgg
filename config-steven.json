@@ -10,9 +10,10 @@
         }
     },
     "algolia": {
-        "app_id": "SGMQYB4SYZ",
-        "api_key_search_only": "c620d1ba898099fadf47c130834b34ab",
-        "index_name": "BGG",
-        "hits_per_page": 48
+        "app_id": "Q0BYOGTQT3",
+        "api_key_search_only": "784f35123be753bf113ed0bb67d6f212",
+        "index_name": "mybgg_sunburn18",
+        "hits_per_page": 48,
+        "sort_by": "asc(name)"
     }
 }

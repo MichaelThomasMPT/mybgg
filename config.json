@@ -1,7 +1,7 @@
 {
     "project": {
         "name": "mybgg",
-        "title": ""
+        "title": "Michael's Boardgames"
     },
     "boardgamegeek": {
         "user_name": "Micker",
@@ -12,7 +12,7 @@
     "algolia": {
         "app_id": "Q0BYOGTQT3",
         "api_key_search_only": "784f35123be753bf113ed0bb67d6f212",
-        "index_name": "BGG",
+        "index_name": "mybgg_micker",
         "hits_per_page": 48,
         "sort_by": "asc(name)"
     }
