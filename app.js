@@ -195,13 +195,13 @@ function get_widgets(SETTINGS) {
         container: '#facet-numplays',
         attribute: 'numplays',
         items: [
-          { label: 'Any' },
-          { label: '0', end: 0 },
-          { label: '1', start: 1, end: 1 },
-          { label: '2-9', start: 2, end: 9 },
-          { label: '10-19', start: 10, end: 19 },
-          { label: '20-29', start: 20, end: 29 },
-          { label: '30+', start: 30 },
+          { label: 'Any number of plays' },
+          { label: 'No plays', end: 0 },
+          { label: '1 play', start: 1, end: 1 },
+          { label: '2-9 plays', start: 2, end: 9 },
+          { label: '10-19 plays', start: 10, end: 19 },
+          { label: '20-29 plays', start: 20, end: 29 },
+          { label: '30+ plays', start: 30 },
         ]
       }
     ),
@@ -229,13 +229,12 @@ function get_widgets(SETTINGS) {
               return;
             }
           });
-          game.players = players.join(", ");
-          game.categories = game.categories.join(", ");
-          game.mechanics = game.mechanics.join(", ");
-          game.tags = game.tags.join(", ");
+          game.players_str = players.join(", ");
+          game.categories_str = game.categories.join(", ");
+          game.mechanics_str = game.mechanics.join(", ");
+          game.tags_str = game.tags.join(", ");
           game.description = game.description.trim();
           game.has_expansions = (game.expansions.length > 0);
-          game.previous_players = game.previous_players.join(", ");
 
           return game;
         });
@@ -266,7 +265,8 @@ function hide_facet_when_no_data(facet_id, games, attr) {
     }
   }
   var widget = document.querySelector(facet_id);
-  if (!has_data_in_attr) {
+  var widget_is_selected = document.querySelector(facet_id + " *[class$='-item--selected']");
+  if (!has_data_in_attr && !widget_is_selected) {
     widget.style.display = 'none';
   }
   else {
