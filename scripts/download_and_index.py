@@ -2,7 +2,7 @@ import json
 
 from mybgg.downloader import Downloader
 from mybgg.indexer import Indexer
-
+from setup_logging import setup_logging
 
 def main(args):
     SETTINGS = json.load(open("config.json", "rb"))
@@ -42,6 +42,8 @@ def main(args):
 if __name__ == '__main__':
     import argparse
 
+    setup_logging()
+
     parser = argparse.ArgumentParser(description='Download and index some boardgames')
     parser.add_argument(
         '--apikey',
@@ -63,13 +65,13 @@ if __name__ == '__main__':
         action='store_true',
         help=(
             "Enable a cache for all BGG calls. This makes script run very "
-            "fast the second time it's run. Bug doesn't fetch new data från BGG."
+            "fast the second time it's run."
         )
     )
     parser.add_argument(
         '--debug',
         action='store_true',
-        help="Print debug information, such as requests made and responsed recieved."
+        help="Print debug information, such as requests made and responses received."
     )
 
     args = parser.parse_args()
