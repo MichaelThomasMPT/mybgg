@@ -27,6 +27,7 @@
       <div class="facet" id="facet-weight" tabindex="0"></div>
       <div class="facet" id="facet-categories" tabindex="0"></div>
       <div class="facet" id="facet-mechanics" tabindex="0"></div>
+      <div class="facet" id="facet-min-age" tabindex="0"></div>
       <div class="facet" id="facet-previous-players" tabindex="0"></div>
       <div class="facet" id="facet-numplays" tabindex="0"></div>
       <div class="clear-all" id="clear-all"></div>
@@ -53,7 +54,7 @@
         <dl class="properties">
           <div>
             <dt>Players</dt>
-            <dd>{{{ players }}}</dd>
+            <dd>{{{ players_str }}}</dd>
           </div>
           <div>
             <dt>Playing time</dt>
@@ -65,30 +66,39 @@
           </div>
           <div>
             <dt>Tags</dt>
-            <dd>{{ tags }}</dd>
+            <dd>{{ tags_str }}</dd>
           </div>
           <div>
             <dt>Categories</dt>
             <dd>
-              {{# categories }}{{ categories }}{{/ categories }}
-              {{^ categories}}<em>No categories</em>{{/ categories }}
+              {{# categories_str }}{{ categories_str }}{{/ categories_str }}
+              {{^ categories_str}}<em>No categories</em>{{/ categories_str }}
             </dd>
           </div>
           <div>
             <dt>Mechanics</dt>
             <dd>
-              {{# mechanics }}{{ mechanics }}{{/ mechanics }}
-              {{^ mechanics}}<em>No mechanics</em>{{/ mechanics }}
+              {{# mechanics_str }}{{ mechanics_str }}{{/ mechanics_str }}
+              {{^ mechanics_str}}<em>No mechanics</em>{{/ mechanics_str }}
             </dd>
+          </div>
+          <div>
+            <dt>Min age</dt>
+            <dd>{{ min_age }}</dd>
           </div>
           {{# has_expansions }}
           <div class="expansions">
             <dt>Expansions</dt>
-            <dd><ul>
-              {{# expansions }}
-                <li><a href="https://boardgamegeek.com/boardgame/{{{ id }}}">{{ name }}</a></li>
-              {{/ expansions }}
-            </ul></dd>
+            <dd>
+              <ul>
+                {{# expansions }}
+                  <li><a href="https://boardgamegeek.com/boardgame/{{{ id }}}">{{ name }}</a></li>
+                {{/ expansions }}
+              </ul>
+              {{# has_more_expansions }}
+                <a href="{{ has_more_expansions_url }}">... see all expansions</a>
+              {{/ has_more_expansions }}
+            </dd>
           </div>
           {{/ has_expansions }}
         </dl>

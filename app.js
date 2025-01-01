@@ -181,6 +181,22 @@ function get_widgets(SETTINGS) {
         sortBy: function(a, b){ return PLAYING_TIME_ORDER.indexOf(a.name) - PLAYING_TIME_ORDER.indexOf(b.name); },
       }
     ),
+    "refine_min_age": panel('Min age')(instantsearch.widgets.numericMenu)(
+      {
+        container: '#facet-min-age',
+        attribute: 'min_age',
+        items: [
+          { label: 'Any age' },
+          { label: '< 5 years', end: 4 },
+          { label: '< 7 years', end: 6 },
+          { label: '< 9 years', end: 8 },
+          { label: '< 11 years', end: 10 },
+          { label: '< 13 years', end: 12 },
+          { label: '< 15 years', end: 14 },
+          { label: '15+', start: 15 },
+        ]
+      }
+    ),
     "refine_previousplayers": panel('Previous players')(instantsearch.widgets.refinementList)(
       {
         container: '#facet-previous-players',
@@ -195,13 +211,13 @@ function get_widgets(SETTINGS) {
         container: '#facet-numplays',
         attribute: 'numplays',
         items: [
-          { label: 'Any' },
-          { label: '0', end: 0 },
-          { label: '1', start: 1, end: 1 },
-          { label: '2-9', start: 2, end: 9 },
-          { label: '10-19', start: 10, end: 19 },
-          { label: '20-29', start: 20, end: 29 },
-          { label: '30+', start: 30 },
+          { label: 'Any number of plays' },
+          { label: 'No plays', end: 0 },
+          { label: '1 play', start: 1, end: 1 },
+          { label: '2-9 plays', start: 2, end: 9 },
+          { label: '10-19 plays', start: 10, end: 19 },
+          { label: '20-29 plays', start: 20, end: 29 },
+          { label: '30+ plays', start: 30 },
         ]
       }
     ),
@@ -229,13 +245,32 @@ function get_widgets(SETTINGS) {
               return;
             }
           });
-          game.players = players.join(", ");
-          game.categories = game.categories.join(", ");
-          game.mechanics = game.mechanics.join(", ");
-          game.tags = game.tags.join(", ");
+          game.players_str = players.join(", ");
+          game.categories_str = game.categories.join(", ");
+          game.mechanics_str = game.mechanics.join(", ");
+          game.tags_str = game.tags.join(", ");
           game.description = game.description.trim();
           game.has_expansions = (game.expansions.length > 0);
-          game.previous_players = game.previous_players.join(", ");
+          game.has_more_expansions = (game.has_more_expansions);
+
+          if (game.has_more_expansions) {
+            game_prefix = game.name.indexOf(":")? game.name.substring(0, game.name.indexOf(":")) : game.name;
+            expansions_url_data = {
+              searchstr: game_prefix,
+              searchfield: "title",
+              objecttype: "thing",
+              subtype: "boardgameexpansion",
+            };
+            has_more_expansions_url = (
+              "https://boardgamegeek.com/collection/user/" +
+              encodeURIComponent(SETTINGS.boardgamegeek.user_name) +
+              "?" +
+              (Object.keys(expansions_url_data).map(function(key){
+                return key + "=" + expansions_url_data[key];
+              })).join("&")  // Don't encode game_prefix, because bgg redirects indefinately then...
+            );
+            game.has_more_expansions_url = has_more_expansions_url;
+          }
 
           return game;
         });
@@ -266,7 +301,8 @@ function hide_facet_when_no_data(facet_id, games, attr) {
     }
   }
   var widget = document.querySelector(facet_id);
-  if (!has_data_in_attr) {
+  var widget_is_selected = document.querySelector(facet_id + " *[class$='-item--selected']");
+  if (!has_data_in_attr && !widget_is_selected) {
     widget.style.display = 'none';
   }
   else {
@@ -318,6 +354,7 @@ function init(SETTINGS) {
     widgets["refine_players"],
     widgets["refine_weight"],
     widgets["refine_playingtime"],
+    widgets["refine_min_age"],
     widgets["hits"],
     widgets["stats"],
     widgets["pagination"],
