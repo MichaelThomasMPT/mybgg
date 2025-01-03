@@ -10,8 +10,8 @@
         }
     },
     "algolia": {
-        "app_id": "Q0BYOGTQT3",
-        "api_key_search_only": "784f35123be753bf113ed0bb67d6f212",
+        "app_id": "A7QXIUF066",
+        "api_key_search_only": "7b98dad335192bc0d2f585e7306bcf1a",
         "index_name": "mybgg_micker",
         "hits_per_page": 48,
         "sort_by": "asc(name)"
